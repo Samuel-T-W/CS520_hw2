@@ -27,7 +27,7 @@ public class ExpenseTrackerController {
     	// Hook up the view and controller
     	
         // Handle add transaction button clicks
-        view.getAddTransactionBtn().addActionListener(e -> {
+        view.getDataPanelView().getAddTransactionBtn().addActionListener(e -> {
         	addTransaction();
         });
         
@@ -63,8 +63,8 @@ public class ExpenseTrackerController {
     public void addTransaction() { 
     	try {
     		// Get transaction data from view
-    		double amount = view.getAmount(); 
-    		String category = view.getCategory();
+    		double amount = view.getDataPanelView().getAmount(); 
+    		String category = view.getDataPanelView().getCategory();
 
     		// Create transaction object
     		Transaction t = new Transaction(amount, category);
@@ -82,7 +82,7 @@ public class ExpenseTrackerController {
     }
     
     public void delete() {
-        int selectedTransactionID = view.getSelectedTransactionID();
+        int selectedTransactionID = view.getDataPanelView().getSelectedTransactionID();
     	boolean removed = model.removeTransaction(selectedTransactionID);
     	if (! removed) {
     		view.displayErrorMessage("A valid transaction was not selected to be removed.");

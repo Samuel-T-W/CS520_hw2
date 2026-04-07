@@ -10,6 +10,7 @@ import org.junit.Test;
 import controller.ExpenseTrackerController;
 import model.ExpenseTrackerModel;
 import model.Transaction;
+import view.DataPanelView;
 import view.ExpenseTrackerView;
 
 public class ExpenseTrackerTest {
@@ -72,10 +73,10 @@ public class ExpenseTrackerTest {
   
   @Test
   public void testAddTransactionE2E() {
-	  ExpenseTrackerView view = controller.getView();
 	  // Perform initialization and check the preconditions
 	  double newAmount = 44.0;
 	  String newCategory = "Other";
+	  DataPanelView view = controller.getView().getDataPanelView();
 	  view.setAmount("" + newAmount);
 	  view.setCategory(newCategory);
 	  assertEquals(0, view.getTransactionsTableRowCount());

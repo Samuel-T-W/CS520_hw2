@@ -19,44 +19,20 @@ import java.util.List;
 public class ExpenseTrackerView extends JFrame {
 
   private ExpenseTrackerModel model;
-  private JTable transactionsTable;
-  private JButton addTransactionBtn;
+  
+  private JTabbedPane tabbedPanel;
+  private DataPanelView dataPanelView;
+  
   private JMenuItem fileOpenFileMenuItem;
   private JMenuItem fileSaveAsMenuItem;
   private JMenuItem editDeleteMenuItem;
-  private JTextField amountField;
-  private JTextField categoryField;
-  private DefaultTableModel transactionsModel;
-  
-  public JTable getTransactionsTable() {
-    return transactionsTable;
-  }
-  
-  public double getAmount() {
-    if(amountField.getText().isEmpty()) {
-      return 0;
-    }else {
-    double amount = Double.parseDouble(amountField.getText());
-    return amount;
-    }
-  }
-  
-  public void setAmount(String amount) {
-	// For testing purposes
-	  amountField.setText(amount);
-  }
 
-  public String getCategory() {
-    return categoryField.getText();
+  public JTabbedPane getTabbedPanel() {
+	  return this.tabbedPanel;
   }
   
-  public void setCategory(String category) {
-	  // For testing purposes
-	  categoryField.setText(category);
-  }
-
-  public JButton getAddTransactionBtn() {
-    return addTransactionBtn;
+  public DataPanelView getDataPanelView() {
+	  return this.dataPanelView;
   }
   
   public JMenuItem getOpenFileMenuItem() {
@@ -71,20 +47,10 @@ public class ExpenseTrackerView extends JFrame {
 	  return editDeleteMenuItem;
   }
 
-  public DefaultTableModel getTableModel() {
-    return transactionsModel;
-  }
-
   public ExpenseTrackerView(ExpenseTrackerModel model) {
     setTitle("Expense Tracker"); // Set title
  
     this.model = model;
-    
-    this.transactionsModel = new DefaultTableModel();
-    this.transactionsModel.addColumn("Serial");
-    this.transactionsModel.addColumn("Amount");
-    this.transactionsModel.addColumn("Category");
-    this.transactionsModel.addColumn("Date");
     
     // Create the top menu bar
     JMenuBar topMenuBar = new JMenuBar();
@@ -99,36 +65,14 @@ public class ExpenseTrackerView extends JFrame {
     this.editDeleteMenuItem = new JMenuItem("Delete");
     editMenu.add(editDeleteMenuItem);
     setJMenuBar(topMenuBar);
-
-    addTransactionBtn = new JButton("Add Transaction");
-
-    // Create UI components
-    JLabel amountLabel = new JLabel("Amount:");
-    amountField = new JTextField(10);
-    
-    JLabel categoryLabel = new JLabel("Category:");
-    categoryField = new JTextField(10);
-    transactionsTable = new JTable(transactionsModel);
-    transactionsTable.setDefaultEditor(Object.class, null);
-    transactionsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
   
     // Layout components
-    JPanel addTransactionPanel = new JPanel();
-    JPanel inputPanel = new JPanel();
-    inputPanel.add(amountLabel);
-    inputPanel.add(amountField);
-    inputPanel.add(categoryLabel); 
-    inputPanel.add(categoryField);
-    inputPanel.add(addTransactionBtn);
-    addTransactionPanel.add(inputPanel);
-    
-    JPanel buttonPanel = new JPanel();
-    buttonPanel.add(addTransactionBtn);
-    addTransactionPanel.add(buttonPanel);
-  
-    // Add panels to frame
-    add(addTransactionPanel, BorderLayout.NORTH);
-    add(new JScrollPane(transactionsTable), BorderLayout.CENTER); 
+    tabbedPanel = new JTabbedPane();
+    dataPanelView = new DataPanelView();
+    JPanel analysisPanel = new JPanel();
+    tabbedPanel.add("Data", dataPanelView);
+    tabbedPanel.add("Analyis", analysisPanel);
+    add(tabbedPanel);
   
     // Set frame properties
     setSize(800, 600);
@@ -156,49 +100,13 @@ public class ExpenseTrackerView extends JFrame {
 	return null;
   }
   
-  public int getSelectedTransactionID() {
-    return this.transactionsTable.getSelectedRow();
-  }
-  
-  public int getTransactionsTableRowCount() {
-	  // For testing purposes
-	  return this.transactionsTable.getRowCount();
-  }
-  
-  public Object getTransactionsTableValueAt(int row, int col) {
-	  // For testing purposes
-	  return this.transactionsModel.getValueAt(row, col);
-  }
-  
   public void displayErrorMessage(String message) {
     JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
-  }
+  } 
 
-  public void refreshTable(List<Transaction> transactions) {
-    // model.setRowCount(0);
-    transactionsModel.setRowCount(0);
-    int rowNum = transactionsModel.getRowCount();
-  
-    // Add rows from transactions list
-    for(Transaction t : transactions) {
-      transactionsModel.addRow(new Object[]{rowNum+=1,t.getAmount(), t.getCategory(), t.getTimestamp()});
-
-    }
-    Object[] totalRow = {"Total", null, null, model.computeTransactionsTotalCost()};
-    transactionsModel.addRow(totalRow);
-  
-    // Fire table update
-    transactionsTable.updateUI();
-  
-  }  
-
-  public void refresh() {
-
-    // Get transactions from model
-    List<Transaction> transactions = model.getTransactions();
-  
+  public void refresh() {  
     // Pass to view
-    refreshTable(transactions);
+    dataPanelView.refreshTable(model);
   
   }
 
