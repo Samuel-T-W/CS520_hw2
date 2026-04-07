@@ -48,6 +48,16 @@ public class ExpenseTrackerController {
         view.setVisible(true);
     }
     
+    public ExpenseTrackerModel getModel() {
+    	// For testing purposes
+    	return this.model;
+    }
+    
+    public ExpenseTrackerView getView() {
+    	// For testing purposes
+    	return this.view;
+    }
+    
     public void addTransaction() {        
         // Get transaction data from view
         double amount = view.getAmount(); 

@@ -31,7 +31,7 @@ public class ExpenseTrackerView extends JFrame {
   public JTable getTransactionsTable() {
     return transactionsTable;
   }
-
+  
   public double getAmount() {
     if(amountField.getText().isEmpty()) {
       return 0;
@@ -40,9 +40,19 @@ public class ExpenseTrackerView extends JFrame {
     return amount;
     }
   }
+  
+  public void setAmount(String amount) {
+	// For testing purposes
+	  amountField.setText(amount);
+  }
 
   public String getCategory() {
     return categoryField.getText();
+  }
+  
+  public void setCategory(String category) {
+	  // For testing purposes
+	  categoryField.setText(category);
   }
 
   public JButton getAddTransactionBtn() {
@@ -148,6 +158,16 @@ public class ExpenseTrackerView extends JFrame {
   
   public int getSelectedTransactionID() {
     return this.transactionsTable.getSelectedRow();
+  }
+  
+  public int getTransactionsTableRowCount() {
+	  // For testing purposes
+	  return this.transactionsTable.getRowCount();
+  }
+  
+  public Object getTransactionsTableValueAt(int row, int col) {
+	  // For testing purposes
+	  return this.transactionsModel.getValueAt(row, col);
   }
   
   public void displayErrorMessage(String message) {

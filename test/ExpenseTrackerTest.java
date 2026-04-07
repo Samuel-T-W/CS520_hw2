@@ -7,17 +7,22 @@ import javax.swing.table.DefaultTableModel;
 import org.junit.Before;
 import org.junit.Test;
 
+import controller.ExpenseTrackerController;
 import model.ExpenseTrackerModel;
 import model.Transaction;
 import view.ExpenseTrackerView;
 
 public class ExpenseTrackerTest {
 
+  // For unit testing
   private ExpenseTrackerModel model;
+  // For end-to-end testing
+  private ExpenseTrackerController controller;
 
   @Before
   public void setup() {
 	model = new ExpenseTrackerModel();
+	controller = new ExpenseTrackerController();
   }
   
   @Test
@@ -63,5 +68,23 @@ public class ExpenseTrackerTest {
 	  // Check the post-conditions
 	  assertEquals(0, model.getTransactions().size());
 	  assertEquals(0, model.computeTransactionsTotalCost(), 0.001);
+  }
+  
+  @Test
+  public void testAddTransactionE2E() {
+	  ExpenseTrackerView view = controller.getView();
+	  // Perform initialization and check the preconditions
+	  double newAmount = 44.0;
+	  String newCategory = "Other";
+	  view.setAmount("" + newAmount);
+	  view.setCategory(newCategory);
+	  assertEquals(0, view.getTransactionsTableRowCount());
+	  // Call the unit under test: Add the new transaction
+	  view.getAddTransactionBtn().doClick();
+	  // Check the post-conditions
+	  assertEquals(2, view.getTransactionsTableRowCount());
+	  assertEquals(newAmount, view.getTransactionsTableValueAt(0, 1));
+	  assertEquals(newCategory, view.getTransactionsTableValueAt(0, 2));
+	  assertEquals(newAmount, view.getTransactionsTableValueAt(1, 3));
   }
 }
