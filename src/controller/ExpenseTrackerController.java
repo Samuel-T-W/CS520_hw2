@@ -1,11 +1,13 @@
 package controller;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import model.CSVExporter;
 import model.CSVImporter;
 import model.ExpenseTrackerModel;
+import model.InputValidation;
 import model.Transaction;
 import view.ExpenseTrackerView;
 
@@ -58,17 +60,25 @@ public class ExpenseTrackerController {
     	return this.view;
     }
     
-    public void addTransaction() {        
-        // Get transaction data from view
-        double amount = view.getAmount(); 
-        String category = view.getCategory();
+    public void addTransaction() { 
+    	try {
+    		// Get transaction data from view
+    		double amount = view.getAmount(); 
+    		String category = view.getCategory();
 
-        // Create transaction object
-        Transaction t = new Transaction(amount, category);
+    		// Create transaction object
+    		Transaction t = new Transaction(amount, category);
 
-        // Call controller to add transaction
-        model.addTransaction(t);
-        view.refresh();
+    		// Call controller to add transaction
+    		model.addTransaction(t);
+    		view.refresh();
+    	}
+    	catch (NumberFormatException nfe) {
+    		view.displayErrorMessage("The amount cannot be parsed as a double number.");
+    	}
+    	catch (IllegalArgumentException iae) {
+    		view.displayErrorMessage(iae.getMessage());
+    	}
     }
     
     public void delete() {
