@@ -30,6 +30,7 @@ The Expense Tracker application has the following structure:
 - `test/`: Contains the JUnit test suite source files
 - `build.xml`: Is the ant build tool input file
 - `build/`: Contains the ant build tool output files
+- `coverage_report/`: Contains the test coverage report
 
 The build requirements are:
 - JDK 21+: Generate API doc (javadoc), compile (javac), run (java)
@@ -43,11 +44,13 @@ From the root directory (containing the build.xml file):
 
 3. Build and run tests: `ant test` (See the build/TEST-*.txt files for more details.)
 
-4. Generate Javadoc: `ant document`
+4. Generate the test coverage report: `ant coverage.report (See the coverage_report/index.html for more details.)
 
-5. Perform linting `ant lint`
+5. Generate Javadoc: `ant document`
 
-6. Clean generated artifacts (e.g., class files, javadoc files): `ant clean`
+6. Perform linting `ant lint`
+
+7. Clean generated artifacts (e.g., class files, javadoc files): `ant clean`
 
 # Architecture
 
