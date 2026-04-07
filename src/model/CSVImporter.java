@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 
-public class CSVImporter {
+public class CSVImporter implements CSVConstants {
 	public List<Transaction> importTransactions(String inputFileName) throws IOException {
 		List<Transaction> importedTransactionsList = null;
 		if (inputFileName != null) {	
@@ -20,7 +20,7 @@ public class CSVImporter {
 			while ((currentLine = reader.readLine()) != null) {
 				// Skip the headers
 				if (currentLineNumber > 1) {
-					StringTokenizer tokenizer = new StringTokenizer(currentLine, ",");
+					StringTokenizer tokenizer = new StringTokenizer(currentLine, COMMA_SEPARATOR);
 					String currentAmountString = tokenizer.nextToken();
 					double currentAmount = Double.parseDouble(currentAmountString);
 					String currentCategory = tokenizer.nextToken();
