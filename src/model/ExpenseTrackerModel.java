@@ -11,11 +11,12 @@ import java.util.List;
 public class ExpenseTrackerModel {
 
 	private List<Transaction> transactions = new ArrayList<>();
-	
+
 	public ExpenseTrackerModel() {
 		super();
 	}
 
+	// needs to be fixed, should return a copy or unmodifiable list.
 	public List<Transaction> getTransactions() {
 		return transactions;
 	}
@@ -25,20 +26,19 @@ public class ExpenseTrackerModel {
 	}
 
 	public boolean removeTransaction(int transactionID) {
-  	  // Perform input validation
-  	  if ((transactionID < 0) || (transactionID > this.getTransactions().size() - 1)) {
-  		  return false;
-  	  }
-  	  else {
-  		  transactions.remove(transactionID);
-  		  return true;
-  	  }
+		// Perform input validation
+		if ((transactionID < 0) || (transactionID > this.getTransactions().size() - 1)) {
+			return false;
+		} else {
+			transactions.remove(transactionID);
+			return true;
+		}
 	}
 
 	public double computeTransactionsTotalCost() {
-		double totalCost=0;
-		for(Transaction t : transactions) {
-			totalCost+=t.getAmount();
+		double totalCost = 0;
+		for (Transaction t : transactions) {
+			totalCost += t.getAmount();
 		}
 		return totalCost;
 	}
