@@ -74,6 +74,7 @@
 	    		<test name="ExpenseTrackerTest"/>
 				<test name="ExpenseTrackerModelTest"/>
     			<test name="TransactionTest"/>
+    			<test name="model.TransactionPackageTest"/>
 	        	<classpath path="bin"/>
 	        	<classpath location="${junit.jar}"/>
 	    		<classpath location="${xchart.jar}"/>
