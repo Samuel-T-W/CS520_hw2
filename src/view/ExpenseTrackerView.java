@@ -27,6 +27,8 @@ public class ExpenseTrackerView extends JFrame {
   private JMenuItem fileSaveAsMenuItem;
   private JMenuItem editDeleteMenuItem;
 
+  private AnalysisPanelView analysisPanelView;
+
   public JTabbedPane getTabbedPanel() {
 	  return this.tabbedPanel;
   }
@@ -69,9 +71,9 @@ public class ExpenseTrackerView extends JFrame {
     // Layout components
     tabbedPanel = new JTabbedPane();
     dataPanelView = new DataPanelView();
-    JPanel analysisPanel = new JPanel();
+    analysisPanelView = new AnalysisPanelView();
     tabbedPanel.add("Data", dataPanelView);
-    tabbedPanel.add("Analyis", analysisPanel);
+    tabbedPanel.add("Analysis", analysisPanelView);
     add(tabbedPanel);
   
     // Set frame properties
@@ -111,4 +113,7 @@ public class ExpenseTrackerView extends JFrame {
   }
 
   // Other view methods
+  public AnalysisPanelView getAnalysisPanelView() {
+    return analysisPanelView;
+  }
 }
