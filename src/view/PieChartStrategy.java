@@ -10,8 +10,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * A concrete implementation of the {@link ChartStrategy} interface that generates 
+ * a Pie Chart using the XChart library. 
+ * * This strategy groups transactions by their category and sums up the total amount 
+ * spent in each category to render the visualization.
+ */
 public class PieChartStrategy implements ChartStrategy {
-
+    
+    /**
+     * Groups the provided transactions by category, calculates the total cost per category, 
+     * and builds an XChart PieChart.
+     * * @param transactions The filtered list of transactions to visualize.
+     * @return An XChartPanel wrapping the generated PieChart for Swing integration.
+     */
     @Override
     public JPanel getChartPanel(List<Transaction> transactions) {
         // Group transactions by category and sum up the amounts

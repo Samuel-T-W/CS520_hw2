@@ -136,6 +136,13 @@ public class ExpenseTrackerController {
     	}
     }
 
+	/**
+     * Handles the logic for generating a chart in the Analysis tab.
+     * * This method fetches all transactions from the model, filters them based on the 
+     * user-specified start and end dates from the view, and passes the filtered list 
+     * to the active {@link ChartStrategy} for rendering. It also handles input validation 
+     * and displays appropriate error messages if no transactions match the criteria.
+     */
 	public void generateChart() {
 		List<Transaction> allTransactions = model.getTransactions();
 		
