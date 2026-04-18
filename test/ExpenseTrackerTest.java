@@ -1,8 +1,12 @@
 
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-import javax.swing.table.DefaultTableModel;
+import java.awt.Window;
+
+import javax.swing.JDialog;
+import javax.swing.JPanel;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,8 +14,8 @@ import org.junit.Test;
 import controller.ExpenseTrackerController;
 import model.ExpenseTrackerModel;
 import model.Transaction;
+import view.AnalysisPanelView;
 import view.DataPanelView;
-import view.ExpenseTrackerView;
 
 public class ExpenseTrackerTest {
 
@@ -71,6 +75,67 @@ public class ExpenseTrackerTest {
 	  assertEquals(0, model.computeTransactionsTotalCost(), 0.001);
   }
   
+  private void dismissDialogAsync() {
+    new Thread(() -> {
+      try { Thread.sleep(300); } catch (InterruptedException ignored) {}
+      for (Window w : Window.getWindows()) {
+        if (w instanceof JDialog && w.isVisible()) {
+          JDialog dialog = (JDialog) w;
+          // Find and click the OK button to dismiss cleanly
+          for (java.awt.Component c : dialog.getContentPane().getComponents()) {
+            if (c instanceof javax.swing.JOptionPane) {
+              javax.swing.JOptionPane pane = (javax.swing.JOptionPane) c;
+              for (java.awt.Component btn : ((java.awt.Container) pane.getComponent(pane.getComponentCount() - 1)).getComponents()) {
+                if (btn instanceof javax.swing.JButton) {
+                  ((javax.swing.JButton) btn).doClick();
+                  return;
+                }
+              }
+            }
+          }
+        }
+      }
+    }).start();
+  }
+
+  @Test
+  public void testGenerateChartNoTransactionsE2E() {
+    // Pre-condition: no transactions have been added
+    assertEquals(0, controller.getModel().getTransactions().size());
+    AnalysisPanelView analysisView = controller.getView().getAnalysisPanelView();
+    JPanel chartArea = (JPanel) analysisView.getComponent(1);
+    assertEquals(0, chartArea.getComponentCount());
+    // Act: click Generate Chart with no transactions; auto-dismiss the error dialog
+    dismissDialogAsync();
+    analysisView.getGenerateChartBtn().doClick();
+    // Post-condition: chart area remains empty (error message shown, no chart rendered)
+    assertEquals(0, chartArea.getComponentCount());
+  }
+
+  @Test
+  public void testGenerateChartWithImportedTransactionsE2E() {
+    // Pre-condition: add multiple transactions with different categories
+    String today = new java.text.SimpleDateFormat("dd-MM-yyyy").format(new java.util.Date());
+    controller.getModel().addTransaction(new Transaction(50.0, "food"));
+    controller.getModel().addTransaction(new Transaction(30.0, "travel"));
+    controller.getModel().addTransaction(new Transaction(20.0, "bills"));
+    assertEquals(3, controller.getModel().getTransactions().size());
+    AnalysisPanelView analysisView = controller.getView().getAnalysisPanelView();
+    analysisView.getStartDate(); // ensure fields exist
+    // Set date window to today so all transactions are included
+    analysisView.getComponent(0); // control panel exists
+    controller.getView().getAnalysisPanelView().getGenerateChartBtn();
+    // Set dates via reflection on the text fields — use today as both start and end
+    java.awt.Component[] controls = ((JPanel) analysisView.getComponent(0)).getComponents();
+    ((javax.swing.JTextField) controls[1]).setText(today);
+    ((javax.swing.JTextField) controls[3]).setText(today);
+    JPanel chartArea = (JPanel) analysisView.getComponent(1);
+    // Act: click Generate Chart
+    analysisView.getGenerateChartBtn().doClick();
+    // Post-condition: a chart panel has been rendered in the display area
+    assertTrue(chartArea.getComponentCount() > 0);
+  }
+
   @Test
   public void testAddTransactionE2E() {
 	  // Perform initialization and check the preconditions
