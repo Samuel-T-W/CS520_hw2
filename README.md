@@ -40,7 +40,7 @@ From the root directory (containing the build.xml file):
 
 1. Build app: `ant compile`
 
-2. Run the app: `java -cp bin ExpenseTrackerApp`
+2. Run the app: `java -cp "bin:lib/*" ExpenseTrackerApp` on Mac/Linux and `java -cp "bin;lib/*" ExpenseTrackerApp` on Windows
 
 3. Build and run tests: `ant test` (See the build/TEST-*.txt files for more details.)
 
@@ -77,6 +77,10 @@ The Expense Tracker application applies the MVC architecture pattern as follows:
 * **Open a Transaction List:**
   In the 'File' menu, select the "Open File..." menu item
   In the Open dialog, first select a valid input file and then click the 'Open' button
+
+* **View Spending Analysis:**
+  In the 'Analysis' tab, enter the date range of interest in DD-MM-YYYY format, then click the 'Generate Chart' button.
+  The spending distribution by category for all transactions within that period will appear in a pie chart. 
 
 # Solution
 
